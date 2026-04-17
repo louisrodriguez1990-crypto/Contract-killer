@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
 
     const newHighScore = highScore.filter((o) => !existingIds.has(o.noticeId));
 
-    let alertResult = { sent: false, error: undefined as string | undefined };
+    let alertResult: { sent: boolean; error?: string } = { sent: false };
     if (newHighScore.length > 0) {
       alertResult = await sendOpportunityAlert(newHighScore);
     }
