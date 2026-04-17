@@ -1,0 +1,28 @@
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# env files (keep .env.example, ignore real ones)
+.env
+.env.local
+.env.*.local
+
+# database
+*.db
+*.db-journal
+prisma/dev.db*
+
+# logs
+*.log
+npm-debug.log*
+
+# editor
+.vscode/
+.idea/
+.DS_Store
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
