@@ -1,0 +1,46 @@
+// Prisma schema — defaults to SQLite for local dev.
+// Switch to Postgres by changing provider + DATABASE_URL in .env.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Tracks every opportunity we've seen so the cron worker
+// knows which are new and worth alerting on.
+model SeenOpportunity {
+  id                String   @id @default(cuid())
+  noticeId          String   @unique
+  title             String
+  agency            String?
+  awardCeiling      Float?
+  responseDeadline  DateTime?
+  score             Int
+  alertedAt         DateTime?
+  firstSeenAt       DateTime @default(now())
+  lastSeenAt        DateTime @updatedAt
+
+  @@index([noticeId])
+  @@index([alertedAt])
+}
+
+// Opportunities the user has marked as "pursuing" — persists across sessions.
+model PursuingOpportunity {
+  id                String   @id @default(cuid())
+  noticeId          String   @unique
+  title             String
+  agency            String?
+  awardCeiling      Float?
+  responseDeadline  DateTime?
+  uiLink            String?
+  notes             String?
+  status            String   @default("pursuing") // pursuing | won | lost | passed
+  addedAt           DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([status])
+}
